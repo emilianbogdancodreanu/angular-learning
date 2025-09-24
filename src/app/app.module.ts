@@ -8,7 +8,7 @@ import { App } from "./app";
         declarations: [
         ],
         imports: [
-            BrowserModule,
+            BrowserModule
         ],
         providers: [],
         bootstrap: [App]
