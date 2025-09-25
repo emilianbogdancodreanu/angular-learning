@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IProduct } from './product.model';
 import { CommonModule } from '@angular/common';
 import { ProductDetails } from '../product-details/product-details';
-import { CartService } from '../cart.service';
+import { CartService } from '../cart/cart.service';
 import { ProductService } from './product.service';
 
 @Component({

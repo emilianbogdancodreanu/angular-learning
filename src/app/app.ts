@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Catalog } from './catalog/catalog';
+import { RouterOutlet } from '@angular/router';
 import { SiteHeader } from './site-header/site-header';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [Catalog, SiteHeader],
+  imports: [RouterOutlet, SiteHeader],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-}
+export class App { }
