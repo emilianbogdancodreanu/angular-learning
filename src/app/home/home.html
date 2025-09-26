@@ -1,6 +1,4 @@
 <div class="container">
-  <div class="hero"></div>
-
   <div class="promoted">
     <img src="assets/images/robot-parts/head-friendly.png" alt="Friendly Robot Head" />
     <div class="promo-text">
@@ -15,25 +13,25 @@
 
   <ul class="robot-parts-cta">
     <li>
-      <a class="part">
+      <a routerLink="/catalog" [queryParams]="{filter: 'Heads'}" class="part">
         <img src="assets/images/robot-parts/head-shredder.png" alt="Robot Heads" />
         <div>ROBOT HEADS</div>
       </a>
     </li>
     <li>
-      <a class="part">
+      <a routerLink="/catalog" [queryParams]="{filter: 'Arms'}" class="part">
         <img src="assets/images/robot-parts/arm-dual-claw.png" alt="Robot Arms" />
         <div>ROBOT ARMS</div>
       </a>
     </li>
     <li>
-      <a class="part">
+      <a routerLink="/catalog" [queryParams]="{filter: 'Torsos'}" class="part">
         <img src="assets/images/robot-parts/torso-gauged.png" alt="Robot Torsos" />
         <div>ROBOT TORSOS</div>
       </a>
     </li>
     <li>
-      <a class="part">
+      <a routerLink="/catalog" [queryParams]="{filter: 'Bases'}" class="part">
         <img src="assets/images/robot-parts/base-rocket.png" alt="Robot Bases" />
         <div>ROBOT BASES</div>
       </a>
