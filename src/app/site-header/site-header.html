@@ -9,7 +9,8 @@
   </div>
   <div class="right" *ngIf="!user">
     <a routerLink="/sign-in" routerLinkActive="active">Sign In</a>
-    <a href="" class="cta">Register</a>
+    <a [routerLink]="['/edit-contact', '']" routerLinkActive="active" class="cta">Register</a>
+    <a routerLink="/contact-list" routerLinkActive="active">List Contacts</a>
   </div>
   <div class="right" *ngIf="user">
     <img src="/assets/images/profile.png" (click)="toggleSignOutMenu()" alt="profile" />

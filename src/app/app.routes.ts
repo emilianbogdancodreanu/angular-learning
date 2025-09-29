@@ -4,6 +4,8 @@ import { Catalog } from './catalog/catalog';
 import { Cart } from './cart/cart';
 import { SignIn } from './user/sign-in/sign-in';
 import { TemplateFormControls } from './template-form-controls/template-form-controls';
+import { EditContact } from './edit-contact/edit-contact';
+import { ContactList } from './contact-list/contact-list';
 
 export const routes: Routes = [
   { path: 'home', component: Home },
@@ -11,5 +13,7 @@ export const routes: Routes = [
   { path: 'cart', component: Cart },
   { path: 'sign-in', component: SignIn },
   { path: 'form-controls', component: TemplateFormControls },
+  { path: 'edit-contact/:id', component: EditContact },
+  { path: 'contact-list', component: ContactList },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
