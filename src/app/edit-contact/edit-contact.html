@@ -25,25 +25,30 @@
       </div>
     </section>
     <section>
-      <nav>Phone</nav>
-      <div formGroupName="phone" class="flex-column">
-        <div class="flex-group">
-          <input formControlName="phoneNumber" placeholder="Phone" />
-          <img src="/assets/plus-grey-blue.png" class="add" />
-        </div>
-        <div *ngFor="let phoneType of phoneTypes" class="radio">
-          <input type="radio" formControlName="phoneType" [value]="phoneType.value"> {{phoneType.title}}
+      <nav>Phones</nav>
+      <div formArrayName="phones">
+        <div *ngFor="let phone of contactForm.controls.phones.controls; let i=index" [formGroupName]="i"
+          class="flex-column">
+          <div class="flex-group">
+            <input formControlName="phoneNumber" placeholder="Phone" />
+            <img src="/assets/plus-grey-blue.png" class="add" (click)="addPhone()" />
+          </div>
+          <div class="radio">
+            <span *ngFor="let phoneType of phoneTypes">
+              <input type="radio" formControlName="phoneType" [value]="phoneType.value"> {{phoneType.title}}
+            </span>
+          </div>
         </div>
       </div>
     </section>
     <section>
       <nav>Address</nav>
-      <div>
-        <div formGroupName="address" class="address"
-          [class.error]="contactForm.controls.address.invalid && contactForm.controls.address.dirty">
+      <div formArrayName="addresses">
+        <div *ngFor="let address of contactForm.controls.addresses.controls; let i=index" [formGroupName]="i"
+          class="address" [class.error]="address.invalid && address.dirty">
           <div class="flex-group">
             <input formControlName="streetAddress" placeholder="Address" />
-            <img src="/assets/plus-grey-blue.png" class="add" />
+            <img src="/assets/plus-grey-blue.png" class="add" (click)="addAddress()"/>
           </div>
           <input placeholder="City" formControlName="city" />
           <input placeholder="State/Region" formControlName="state" />
@@ -54,7 +59,7 @@
             </option>
           </select>
         </div>
-        <em *ngIf="contactForm.controls.address.invalid && contactForm.controls.address.dirty">Incomplete address</em>
+        <em *ngIf="contactForm.controls.addresses.invalid && contactForm.controls.addresses.dirty">Incomplete address</em>
       </div>
     </section>
     <section>

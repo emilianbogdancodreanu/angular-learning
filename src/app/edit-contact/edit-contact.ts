@@ -25,17 +25,8 @@ export class EditContact implements OnInit {
     lastName: '',
     dateOfBirth: <Date | null>null,
     favoritesRanking: <number | null>null,
-    phone: this.fb.nonNullable.group({
-      phoneNumber: '',
-      phoneType: ''
-    }),
-    address: this.fb.nonNullable.group({
-      streetAddress: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      addressType: ''
-    }),
+    phones: this.fb.array([this.createPhoneGroup()]),
+    addresses: this.fb.array([this.createAddressGroup()]),
     notes: ['', restrictedWords(['foo', 'bar'])]
   });
 
@@ -51,6 +42,14 @@ export class EditContact implements OnInit {
     this.contactService.getContact(contactId).subscribe((contact) => {
       if (!contact) return;
 
+      for (let i = 1; i < contact.phones.length; i++) {
+        this.addPhone();
+      }
+
+      for (let i = 1; i < contact.addresses.length; i++) {
+        this.addAddress();
+      }
+
       this.contactForm.setValue(contact);
     });
   }
@@ -61,6 +60,31 @@ export class EditContact implements OnInit {
 
   get notes() {
     return this.contactForm.controls.notes;
+  }
+
+  createPhoneGroup() {
+    return this.fb.nonNullable.group({
+      phoneNumber: '',
+      phoneType: ''
+    });
+  }
+
+  createAddressGroup() {
+    return this.fb.nonNullable.group({
+      streetAddress: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      postalCode: ['', Validators.required],
+      addressType: ['', Validators.required]
+    });
+  }
+
+  addPhone() {
+    this.contactForm.controls.phones.push(this.createPhoneGroup());
+  }
+
+  addAddress() {
+    this.contactForm.controls.addresses.push(this.createAddressGroup());
   }
 
   saveContact() {
