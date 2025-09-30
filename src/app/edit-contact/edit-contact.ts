@@ -7,6 +7,7 @@ import { addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
 import { restrictedWords } from '../validators/restricted-words.validator';
 import { DateValueAccessorDirective } from '../date-value-accessor/date-value-accessor.directive';
 import { ProfileIconSelector } from '../profile-icon-selector/profile-icon-selector';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, DateValueAccessorDirective, ProfileIconSelector],
@@ -37,7 +38,8 @@ export class EditContact implements OnInit {
 
   ngOnInit() {
     const contactId = this.route.snapshot.params['id'];
-    if (!contactId) return;
+    if (!contactId)
+      return;
 
     this.contactService.getContact(contactId).subscribe((contact) => {
       if (!contact) return;
@@ -62,21 +64,58 @@ export class EditContact implements OnInit {
     return this.contactForm.controls.notes;
   }
 
+  stringifyCompare(a: any, b: any) {
+    return JSON.stringify(a) == JSON.stringify(b);
+  }
+
   createPhoneGroup() {
-    return this.fb.nonNullable.group({
+    const phoneGroup = this.fb.nonNullable.group({
       phoneNumber: '',
-      phoneType: ''
+      phoneType: '',
+      preferred: false
     });
+
+    phoneGroup.controls.preferred.valueChanges
+      .pipe(distinctUntilChanged(this.stringifyCompare))
+      .subscribe(value => {
+        if (value)
+          phoneGroup.controls.phoneNumber.addValidators([Validators.required]);
+        else
+          phoneGroup.controls.phoneNumber.removeValidators([Validators.required]);
+        phoneGroup.controls.phoneNumber.updateValueAndValidity();
+      });
+
+    return phoneGroup;
   }
 
   createAddressGroup() {
-    return this.fb.nonNullable.group({
+    const addressGroup = this.fb.nonNullable.group({
       streetAddress: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
       postalCode: ['', Validators.required],
       addressType: ['', Validators.required]
     });
+
+    addressGroup.valueChanges
+      .pipe(distinctUntilChanged(this.stringifyCompare))
+      .subscribe(() => {
+        for (const controlName in addressGroup.controls) {
+          addressGroup.get(controlName)?.removeValidators([Validators.required]);
+          addressGroup.get(controlName)?.updateValueAndValidity();
+        }
+      });
+
+    addressGroup.valueChanges
+      .pipe(debounceTime(2000), distinctUntilChanged(this.stringifyCompare))
+      .subscribe(() => {
+        for (const controlName in addressGroup.controls) {
+          addressGroup.get(controlName)?.addValidators([Validators.required]);
+          addressGroup.get(controlName)?.updateValueAndValidity();
+        }
+      });
+
+    return addressGroup;
   }
 
   addPhone() {
