@@ -5,9 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 import { addressTypeValues, phoneTypeValues } from '../contacts/contact.model';
 import { restrictedWords } from '../validators/restricted-words.validator';
+import { DateValueAccessorDirective } from '../date-value-accessor/date-value-accessor.directive';
+import { ProfileIconSelector } from '../profile-icon-selector/profile-icon-selector';
 
 @Component({
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DateValueAccessorDirective, ProfileIconSelector],
   templateUrl: './edit-contact.html',
   styleUrls: ['./edit-contact.css']
 })
@@ -17,6 +19,7 @@ export class EditContact implements OnInit {
   fb = new FormBuilder();
   contactForm = this.fb.nonNullable.group({
     id: '',
+    icon: '',
     personal: false,
     firstName: ['', [Validators.required, Validators.minLength(3)]],
     lastName: '',
