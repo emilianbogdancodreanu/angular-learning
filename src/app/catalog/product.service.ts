@@ -10,6 +10,11 @@ export class ProductService {
   constructor(private http: HttpClient) {  }
 
   getProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>("/api/products")
+    return this.http.get<IProduct[]>("/api/products");
+  }
+
+  getImageUrl(product: IProduct) {
+    if (!product) return '';
+    return '/assets/images/robot-parts/' + product.imageName
   }
 }

@@ -5,6 +5,7 @@ import { ProductDetails } from '../product-details/product-details';
 import { CartService } from '../cart/cart.service';
 import { ProductService } from './product.service';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'bot-catalog',
@@ -13,7 +14,7 @@ import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/r
   styleUrl: './catalog.css'
 })
 export class Catalog {
-  products: any;
+  products: Observable<IProduct[]> = this.productSvc.getProducts();
   filter: string = '';
 
   constructor(
@@ -24,9 +25,6 @@ export class Catalog {
   ) { }
 
   ngOnInit() {
-    this.productSvc.getProducts().subscribe(products => {
-      this.products = products;
-    });
     this.route.queryParams.subscribe(params => {
       this.filter = params['filter'] ?? ''; 
     });
@@ -38,8 +36,9 @@ export class Catalog {
   }
 
   getFilteredProducts() {
+    console.log(this.filter + "test");
     return this.filter === ''
       ? this.products
-      : this.products?.filter((product: any) => product?.category == this.filter);
+      : this.products.pipe(map(p => p.filter(product => product.category == this.filter)));
   }
 }

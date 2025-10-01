@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from './cart.service';
 import { IProduct } from '../catalog/product.model';
 import { CommonModule } from '@angular/common';
+import { ProductService } from '../catalog/product.service';
 
 @Component({
   selector: 'bot-cart',
@@ -9,25 +10,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
-export class Cart implements OnInit {
-  private cart: IProduct[] = [];
-  constructor(private cartSvc: CartService) { }
-
-  ngOnInit(): void {
-    this.cartSvc.getCart().subscribe({
-      next: cart => this.cart = cart
-    })
-  }
+export class Cart {
+  constructor(
+    private cartSvc: CartService,
+    private prodSvc: ProductService
+  ) { }
 
   get cartItems() {
-    return this.cart;
+    return this.cartSvc.cart();
   }
 
   get cartTotal() {
-    return this.cart.reduce((prev, next) => {
-      let discount = next.discount && next.discount > 0 ? 1 - next.discount : 1;
-      return prev + next.price * discount;
-    }, 0);
+    return this.cartSvc.cartTotal();
   }
 
   removeFromCart(product: IProduct) {
@@ -35,7 +29,6 @@ export class Cart implements OnInit {
   }
 
   getImageUrl(product: IProduct) {
-    if (!product) return '';
-    return '/assets/images/robot-parts/' + product.imageName
+    return this.prodSvc.getImageUrl(product);
   }
 }
