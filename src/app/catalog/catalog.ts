@@ -14,7 +14,7 @@ import { map, Observable } from 'rxjs';
   styleUrl: './catalog.css'
 })
 export class Catalog {
-  products: Observable<IProduct[]> = this.productSvc.getProducts();
+  products: Observable<IProduct[]> = new Observable<IProduct[]>();
   filter: string = '';
 
   constructor(
@@ -25,20 +25,19 @@ export class Catalog {
   ) { }
 
   ngOnInit() {
+    this.products = this.productSvc.getProducts();
+
     this.route.queryParams.subscribe(params => {
-      this.filter = params['filter'] ?? ''; 
+      this.filter = params['filter'] ?? '';
+      if (this.filter === '')
+        this.products = this.products;
+      else
+        this.products = this.products.pipe(map((items) => items.filter((product) => product.category === this.filter)));
     });
   }
 
   addToCart(product: IProduct) {
     this.cartSvc.add(product);
     this.router.navigate(['/cart']);
-  }
-
-  getFilteredProducts() {
-    console.log(this.filter + "test");
-    return this.filter === ''
-      ? this.products
-      : this.products.pipe(map(p => p.filter(product => product.category == this.filter)));
   }
 }
